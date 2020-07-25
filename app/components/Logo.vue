@@ -1,16 +1,20 @@
 <template>
-  <nuxt-link to="/" class="block p-1">
-    <img src="~/assets/img/logo.svg" :alt="alt" class="block m-auto" />
+  <nuxt-link to="/" class="inline-flex items-center p-1 m-auto">
+    <SvgLogo :alt="title" class="w-12 h-12" />
+    <h1 class="ml-3 text-3xl text-bold">{{ title }}</h1>
   </nuxt-link>
 </template>
 
 <script>
+import SvgLogo from '~/assets/img/logo.svg?inline'
+
 export default {
   name: 'Logo',
+  components: { SvgLogo },
   props: {
-    alt: {
+    title: {
       type: String,
-      default: 'Hello World!',
+      default: 'To-Do List',
     },
   },
 }
