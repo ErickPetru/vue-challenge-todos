@@ -1,7 +1,7 @@
 <template>
   <footer class="flex-grow-0 mt-16 text-font-primary bg-primary">
-    <div class="bg-primary-dark text-center">
-      <p class="my-0 py-6 container font-light">
+    <div class="text-center bg-primary-dark">
+      <p class="container py-6 my-0 font-light">
         Alterar tema:
         <a
           :href="!theme ? null : '#padrao'"
@@ -25,7 +25,7 @@
     </div>
 
     <div
-      class="container my-8 text-center text-sm text-font-secondary font-light"
+      class="container my-8 text-sm font-light text-center text-font-secondary"
     >
       <p>
         © 2020 <strong class="font-normal">Erick Eduardo Petrucelli</strong>
