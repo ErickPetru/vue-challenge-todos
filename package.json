@@ -1,0 +1,17 @@
+{
+  "name": "vue-challenge-todos",
+  "description": "Desafio Vue.js referente à aplicação \"To-Do List\", utilizada como tema pela Ootz em processos de seleção.",
+  "author": "Erick Eduardo Petrucelli <erickpetru@gmail.com>",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/erickpetru/vue-challenge-todos"
+  },
+  "scripts": {
+    "postinstall": "cd ./app && npm install --loglevel=error",
+    "start": "docker-compose up --build -d",
+    "dev": "cd ./app && npm run dev",
+    "analyze": "cd ./app && npm run analyze",
+    "precommit": "cd ./app && npm run lint"
+  }
+}
