@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link to="/" class="block p-1 outline-none focus:shadow-outline">
+  <nuxt-link to="/" class="block p-1">
     <img src="~/assets/img/logo.svg" :alt="alt" class="block m-auto" />
   </nuxt-link>
 </template>

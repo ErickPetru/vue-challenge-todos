@@ -1,0 +1,38 @@
+html,
+body,
+#__nuxt,
+#__layout,
+#app {
+  @apply h-full;
+}
+
+input::placeholder {
+  @apply opacity-100;
+  @apply text-font-secondary;
+  @apply text-opacity-75;
+}
+
+input::-moz-placeholder {
+  @apply opacity-100;
+  @apply text-font-secondary;
+  @apply text-opacity-75;
+}
+
+input, button, a {
+  @apply transition;
+  @apply duration-300;
+  @apply ease-in-out;
+}
+
+a {
+  @apply outline-none;
+  @apply text-secondary;
+}
+
+a:hover, a:focus {
+  @apply text-secondary-dark;
+}
+
+a:focus {
+  @apply shadow-outline;
+}

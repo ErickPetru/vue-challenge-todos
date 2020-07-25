@@ -1,0 +1,13 @@
+:root {
+  --color-body: #f5f5f5;
+  --color-font-primary: rgba(0, 0, 0, .97);
+  --color-font-secondary: rgba(0, 0, 0, .65);
+  --color-font-inverse-primary: rgba(255, 255, 255, .97);
+  --color-font-inverse-secondary: rgba(255, 255, 255, .75);
+  --color-primary-light: #80f573;
+  --color-primary-default: #5cc551;
+  --color-primary-dark: #47b63b;
+  --color-secondary-light: #b2dfdb;
+  --color-secondary-default: #009688;
+  --color-secondary-dark: #00796b;
+}

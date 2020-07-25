@@ -4,3 +4,9 @@
 /* purgecss end ignore */
 
 @import 'tailwindcss/utilities';
+
+@import './theme.default.css';
+@import './theme.dark.css';
+@import './theme.grayscale.css';
+
+@import './base';

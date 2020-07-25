@@ -82,9 +82,9 @@ export default {
   },
   webfontloader: {
     custom: {
-      families: ['Roboto:n4,n7'],
+      families: ['Roboto:n3,n4,n7'],
       urls: [
-        'https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap',
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap',
       ],
     },
   },

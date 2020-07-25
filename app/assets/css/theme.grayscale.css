@@ -1,0 +1,11 @@
+.theme-grayscale {
+  --color-body: #dddddd;
+  --color-font-primary: #080808;
+  --color-font-secondary: #2b2b2b;
+  --color-primary-light: #949494;
+  --color-primary-default: #474747;
+  --color-primary-dark: #303030;
+  --color-secondary-light: #969696;
+  --color-secondary-default: #575757;
+  --color-secondary-dark: #4b4b4b;
+}
