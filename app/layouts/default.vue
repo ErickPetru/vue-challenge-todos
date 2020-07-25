@@ -1,9 +1,11 @@
 <template>
   <div
     id="app"
-    class="antialiased font-base flex flex-col justify-between bg-body text-font-primary"
+    class="flex flex-col justify-between antialiased font-base bg-body text-font-primary"
     :class="theme"
   >
+    <Header />
+
     <div class="flex flex-col justify-center flex-grow">
       <Nuxt />
     </div>
