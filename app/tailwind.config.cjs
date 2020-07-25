@@ -34,7 +34,7 @@ module.exports = {
     },
 
     boxShadow: {
-      outline: '0 0 0 2px var(--color-primary-default)',
+      outline: '0 0 0 2px var(--color-secondary-default)',
       none: 'none',
     },
 
