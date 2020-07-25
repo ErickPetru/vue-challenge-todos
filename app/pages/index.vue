@@ -1,6 +1,6 @@
 <template>
-  <div class="container text-center">
-    <h1 class="text-2xl">Hello World!</h1>
+  <div class="container">
+    <FrameList />
   </div>
 </template>
 

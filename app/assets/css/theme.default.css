@@ -4,10 +4,14 @@
   --color-font-secondary: rgba(0, 0, 0, .65);
   --color-font-inverse-primary: rgba(255, 255, 255, .97);
   --color-font-inverse-secondary: rgba(255, 255, 255, .75);
-  --color-primary-light: #b2dfdb;
+  --color-primary-lighter: #a7f7d5;
+  --color-primary-light: #74f0bc;
   --color-primary-default: #46ffb3;
-  --color-primary-dark: #24bd7d;
-  --color-secondary-light: #98f38d;
+  --color-primary-dark: #31d691;
+  --color-primary-darker: #0b8150;
+  --color-secondary-lighter: #aaf1a3;
+  --color-secondary-light: #84eb79;
   --color-secondary-default: #54c147;
   --color-secondary-dark: #34a028;
+  --color-secondary-darker: #1c7412;
 }

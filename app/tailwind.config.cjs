@@ -47,14 +47,18 @@ module.exports = {
         'inverse-secondary': 'var(--color-font-inverse-secondary)',
       },
       primary: {
+        lighter: 'var(--color-primary-lighter)',
         light: 'var(--color-primary-light)',
         default: 'var(--color-primary-default)',
         dark: 'var(--color-primary-dark)',
+        darker: 'var(--color-primary-darker)',
       },
       secondary: {
+        lighter: 'var(--color-secondary-lighter)',
         light: 'var(--color-secondary-light)',
         default: 'var(--color-secondary-default)',
         dark: 'var(--color-secondary-dark)',
+        darker: 'var(--color-secondary-darker)',
       },
     },
   },
