@@ -60,6 +60,9 @@ export default {
 
     // Doc: https://pwa.nuxtjs.org/
     '@nuxtjs/pwa',
+
+    // Doc: https://github.com/nuxt-community/svg-module/
+    '@nuxtjs/svg',
   ],
   plugins: [],
   http: {
