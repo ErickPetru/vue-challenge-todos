@@ -1,0 +1,189 @@
+<template>
+  <div class="container">
+    <FrameList />
+
+    <div
+      class="fixed top-0 left-0 flex items-center justify-center w-full h-full modal"
+    >
+      <div
+        class="absolute w-full h-full bg-black opacity-75 modal-overlay"
+      ></div>
+
+      <div
+        class="z-50 w-11/12 mx-auto overflow-y-auto rounded shadow-xl bg-body modal-container md:max-w-md"
+      >
+        <nuxt-link
+          to="/"
+          class="absolute top-0 right-0 z-50 flex flex-col items-center p-1 mt-3 mr-3 text-sm text-font-secondary modal-close hover:text-primary-lighter focus:text-primary-lighter"
+        >
+          <SvgClose class="fill-current" />
+          <span class="text-sm">(Esc)</span>
+        </nuxt-link>
+
+        <div class="px-6 py-4 text-left modal-content">
+          <div v-if="todo">
+            <div class="flex items-start justify-between pb-3">
+              <div class="w-full my-2 mr-2 text-2xl font-bold">
+                <EditableLabel
+                  :value="todo.title"
+                  @confirmed="updateTodoTitle(todo.id, ...arguments)"
+                />
+              </div>
+              <nuxt-link
+                to="/"
+                class="z-50 flex-grow-0 my-2 cursor-pointer text-font-primary modal-close"
+              >
+                <SvgClose class="fill-current" />
+              </nuxt-link>
+            </div>
+
+            <p
+              v-if="todo.created_at"
+              class="flex my-2 text-sm text-font-secondary"
+            >
+              <SvgClock class="flex-grow-0 w-4 fill-current" />
+              <span>{{
+                todo.created_at
+                  | dateParse('YYYY-MM-DD HH:mm:ss')
+                  | dateFormat('DD MMMM, YYYY')
+              }}</span>
+            </p>
+
+            <div class="mt-1">
+              <textarea
+                v-model="todo.description"
+                placeholder="Adicione uma descrição mais detalhada..."
+              />
+            </div>
+
+            <div class="mt-1">
+              <label class="inline-flex items-center h-full cursor-pointer">
+                <input
+                  v-model="done"
+                  type="checkbox"
+                  class="w-5 h-5 bg-font-inverse-secondary text-primary-darker form-checkbox"
+                /><span
+                  class="ml-2 transition duration-300 ease-in-out text-font-primary"
+                  >Marcar tarefa como <b>concluída</b></span
+                >
+              </label>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-4">
+              <button class="primary" @click="updateTodo">
+                <SvgSave class="fill-current" />
+                <span>Salvar</span>
+              </button>
+
+              <button @click="removeTodo">
+                <SvgDelete class="fill-current" />
+                <span>Excluir</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            v-else-if="$fetchState.pending || loading"
+            class="flex items-center justify-center p-4"
+          >
+            <SvgLoading class="text-primary-dark" />
+          </div>
+
+          <div v-else-if="$fetchState.error">
+            <div class="flex items-start justify-between pb-3">
+              <p class="w-full my-2 mr-2 text-2xl font-bold">
+                Tarefa não localizada!
+              </p>
+              <nuxt-link
+                to="/"
+                class="z-50 flex-grow-0 my-2 cursor-pointer text-font-primary modal-close"
+              >
+                <SvgClose class="fill-current" />
+              </nuxt-link>
+            </div>
+
+            <p>
+              Não foi possível localizar a tarefa desejada. Confira o endereço
+              utilizado ou retorne à
+              <nuxt-link to="/">
+                tela principal
+              </nuxt-link>
+              para criar uma nova tarefa ou selecionar outra tarefa existente.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import SvgClock from '~/assets/img/clock.svg?inline'
+import SvgClose from '~/assets/img/close.svg?inline'
+import SvgDelete from '~/assets/img/delete.svg?inline'
+import SvgLoading from '~/assets/img/loading.svg?inline'
+import SvgSave from '~/assets/img/save.svg?inline'
+
+export default {
+  name: 'TodoItem',
+  components: {
+    SvgClock,
+    SvgClose,
+    SvgDelete,
+    SvgLoading,
+    SvgSave,
+  },
+  async fetch() {
+    const result = await this.$http.$get(`todo/${this.$route.params.id}`)
+    if (result.data) {
+      this.todo = result.data
+    }
+  },
+  data: () => ({
+    todo: null,
+    loading: false,
+  }),
+  computed: {
+    done: {
+      get() {
+        return this.todo ? !this.todo.open : false
+      },
+
+      set(value) {
+        this.todo.open = !value
+      },
+    },
+  },
+  mounted() {
+    if (document) {
+      document.addEventListener('keyup', (event) => {
+        if (event.keyCode === 27) {
+          this.$router.push('/')
+        }
+      })
+    }
+  },
+  methods: {
+    async updateTodo() {
+      this.loading = true
+      const payload = { frameId: this.todo.frame_id, todo: this.todo }
+      await this.$store.dispatch('updateTodo', payload)
+      this.$router.push('/')
+    },
+
+    async removeTodo() {
+      if (confirm('Deseja excluir permanentemente esta tarefa?')) {
+        this.loading = true
+        await this.$store.dispatch('removeTodo', this.todo)
+        this.$router.push('/')
+      }
+    },
+  },
+}
+</script>
+
+<style scoped>
+.modal-overlay {
+  backdrop-filter: blur(100px);
+}
+</style>

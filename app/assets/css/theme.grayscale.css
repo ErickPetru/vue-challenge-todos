@@ -1,7 +1,11 @@
 .theme-grayscale {
   --color-body: #b4b4b4;
-  --color-font-primary: #080808;
-  --color-font-secondary: #2b2b2b;
+  --color-font-primary: rgba(0, 0, 0, .97);
+  --color-font-secondary: rgba(0, 0, 0, .65);
+  --color-font-tertiary: rgba(0, 0, 0, .25);
+  --color-font-inverse-primary: rgba(255, 255, 255, .97);
+  --color-font-inverse-secondary: rgba(255, 255, 255, .75);
+  --color-font-inverse-tertiary: rgba(255, 255, 255, .25);
   --color-primary-lighter: #d3d3d3;
   --color-primary-light: #b6b6b6;
   --color-primary-default: #474747;

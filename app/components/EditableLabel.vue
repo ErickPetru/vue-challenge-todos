@@ -73,16 +73,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-input:not([type]),
-input[type='text'] {
-  @apply outline-none;
-  @apply py-1;
-  @apply px-2;
-  @apply w-full;
-  @apply border-primary-darker;
-  @apply border;
-  @apply bg-font-inverse-secondary;
-}
-</style>

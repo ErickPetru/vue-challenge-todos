@@ -6,19 +6,31 @@ body,
   @apply h-full;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   @apply opacity-100;
   @apply text-font-secondary;
   @apply text-opacity-75;
 }
 
-input::-moz-placeholder {
+input::-moz-placeholder,
+textarea::-moz-placeholder {
   @apply opacity-100;
   @apply text-font-secondary;
   @apply text-opacity-75;
 }
 
-input, button, a {
+::selection {
+  @apply bg-secondary-darker;
+  @apply text-font-inverse-primary;
+} 
+
+::-moz-selection {
+  @apply bg-secondary-darker;
+  @apply text-font-inverse-primary;
+} 
+
+input, textarea, button, a {
   @apply transition;
   @apply duration-300;
   @apply ease-in-out;
@@ -37,4 +49,73 @@ a:focus {
   @apply shadow-outline;
 }
 
+input:not([type]),
+input[type='text'],
+textarea {
+  @apply outline-none;
+  @apply py-1;
+  @apply px-2;
+  @apply w-full;
+  @apply bg-font-inverse-secondary;
+  @apply text-font-primary;
+}
 
+input:not([type]),
+input[type='text'] {
+  @apply border-primary-darker;
+  @apply border;
+}
+
+textarea:hover,
+textarea:focus {
+  @apply bg-font-tertiary;
+}
+
+.form-checkbox {
+  cursor: inherit;
+}
+
+.form-checkbox:focus {
+  @apply outline-none;
+  @apply shadow-outline;
+  @apply border-primary-darker;
+}
+
+.form-checkbox + span {
+  @apply opacity-75;
+}
+
+.form-checkbox:hover + span,
+.form-checkbox:focus + span {
+  @apply opacity-100;
+}
+
+button {
+  @apply px-4;
+  @apply py-2;
+  @apply flex;
+  @apply items-center;
+  @apply bg-transparent;
+  @apply text-font-primary;
+  @apply rounded-lg;
+  @apply outline-none;
+  @apply leading-none;
+}
+
+button.primary {
+  @apply bg-secondary-light;
+}
+
+button:hover,
+button:focus {
+  @apply bg-secondary-dark;
+  @apply text-font-inverse-primary;
+  @apply shadow;
+}
+
+button svg {
+  @apply fill-current;
+  @apply flex-grow-0;
+  @apply w-6;
+  @apply mr-1;
+}

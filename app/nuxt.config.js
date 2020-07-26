@@ -64,7 +64,10 @@ export default {
     // Doc: https://github.com/nuxt-community/svg-module/
     '@nuxtjs/svg',
   ],
-  plugins: [],
+  plugins: [
+    '@/plugins/filter-date-format.js',
+    '@/plugins/filter-date-parse.js',
+  ],
   http: {
     baseURL: 'http://api.todo.ootz.com.br/',
     headers: {

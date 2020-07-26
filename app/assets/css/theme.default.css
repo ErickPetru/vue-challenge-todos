@@ -2,8 +2,10 @@
   --color-body: #f5f5f5;
   --color-font-primary: rgba(0, 0, 0, .97);
   --color-font-secondary: rgba(0, 0, 0, .65);
+  --color-font-tertiary: rgba(0, 0, 0, .25);
   --color-font-inverse-primary: rgba(255, 255, 255, .97);
   --color-font-inverse-secondary: rgba(255, 255, 255, .75);
+  --color-font-inverse-tertiary: rgba(255, 255, 255, .25);
   --color-primary-lighter: #a7f7d5;
   --color-primary-light: #74f0bc;
   --color-primary-default: #46ffb3;
@@ -13,5 +15,5 @@
   --color-secondary-light: #84eb79;
   --color-secondary-default: #54c147;
   --color-secondary-dark: #34a028;
-  --color-secondary-darker: #1c7412;
+  --color-secondary-darker: #218016;
 }

@@ -1,6 +1,9 @@
 <template>
-  <nuxt-link to="/" class="inline-flex items-center p-1 m-auto">
-    <SvgLogo :alt="title" class="w-12 h-12" />
+  <nuxt-link
+    to="/"
+    class="inline-flex items-center p-1 m-auto text-secondary-darker"
+  >
+    <SvgLogo :alt="title" class="w-12 h-12 fill-current" />
     <h1 class="ml-3 text-3xl text-bold">{{ title }}</h1>
   </nuxt-link>
 </template>
