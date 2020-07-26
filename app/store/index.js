@@ -8,17 +8,26 @@ export const mutations = {
   },
 
   addFrame(state, frame) {
+    if (!frame.todos) {
+      frame.todos = []
+    }
     state.frames.push(frame)
   },
 
   updateFrame(state, frame) {
     const index = state.frames.findIndex((f) => f.id === frame.id)
-    state.frames[index].title = frame.title
-    state.frames[index].order = frame.order
+
+    if (frame.title !== undefined) {
+      state.frames[index].title = frame.title
+    }
+
+    if (frame.order !== undefined) {
+      state.frames[index].order = frame.order
+    }
   },
 
-  removeFrame(state, id) {
-    const index = state.frames.findIndex((f) => f.id === id)
+  removeFrame(state, frame) {
+    const index = state.frames.findIndex((f) => f.id === frame.id)
     state.frames.splice(index, 1)
   },
 
@@ -32,10 +41,26 @@ export const mutations = {
     const todoIndex = state.frames[frameIndex].todos.findIndex(
       (t) => t.id === todo.id
     )
-    state.frames[frameIndex].todos[todoIndex].title = todo.title
-    state.frames[frameIndex].todos[todoIndex].description = todo.description
-    state.frames[frameIndex].todos[todoIndex].open = todo.open
-    state.frames[frameIndex].todos[todoIndex].order = todo.order
+
+    if (todo.frame_id !== undefined) {
+      state.frames[frameIndex].todos[todoIndex].frame_id = todo.frame_id
+    }
+
+    if (todo.title !== undefined) {
+      state.frames[frameIndex].todos[todoIndex].title = todo.title
+    }
+
+    if (todo.description !== undefined) {
+      state.frames[frameIndex].todos[todoIndex].description = todo.description
+    }
+
+    if (todo.open !== undefined) {
+      state.frames[frameIndex].todos[todoIndex].open = todo.open
+    }
+
+    if (todo.order !== undefined) {
+      state.frames[frameIndex].todos[todoIndex].order = todo.order
+    }
 
     if (frameId !== todo.frame_id) {
       const newFrameIndex = state.frames.findIndex(
@@ -64,30 +89,60 @@ export const actions = {
   async addFrame({ commit }, frame) {
     const { data } = await this.$http.$post('frame', frame)
     await commit('addFrame', data)
+    return data
   },
 
   async updateFrame({ commit }, frame) {
     const { data } = await this.$http.$put('frame', frame)
     await commit('updateFrame', data)
+    return data
   },
 
-  async removeFrame({ commit }, id) {
-    await this.$http.$delete(`frame/${id}`)
-    await commit('removeFrame', id)
+  async removeFrame({ commit, dispatch, state }, frame) {
+    await this.$http.$delete(`frame/${frame.id}`)
+
+    const nextSiblings = state.frames.filter((f) => f.order > frame.order)
+
+    for (const sibling of nextSiblings) {
+      await dispatch('updateFrame', {
+        id: sibling.id,
+        order: sibling.order - 1,
+      })
+    }
+
+    await commit('removeFrame', frame)
   },
 
   async addTodo({ commit }, todo) {
     const { data } = await this.$http.$post('todo', todo)
     await commit('addTodo', data)
+    return data
   },
 
   async updateTodo({ commit }, { frameId, todo }) {
     const { data } = await this.$http.$put('todo', todo)
     await commit('updateTodo', { frameId, todo: data })
+    return data
   },
 
-  async removeTodo({ commit }, todo) {
+  async removeTodo({ commit, dispatch, state }, todo) {
     await this.$http.$delete(`todo/${todo.id}`)
+
+    const frameIndex = state.frames.findIndex((f) => f.id === todo.frame_id)
+    const nextSiblings = state.frames[frameIndex].todos.filter(
+      (t) => t.order > todo.order
+    )
+
+    for (const sibling of nextSiblings) {
+      await dispatch('updateTodo', {
+        frameId: todo.frame_id,
+        todo: {
+          id: sibling.id,
+          order: sibling.order - 1,
+        },
+      })
+    }
+
     await commit('removeTodo', todo)
   },
 }

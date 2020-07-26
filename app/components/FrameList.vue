@@ -11,13 +11,13 @@
           <a
             href="#excluir"
             class="flex flex-grow-0 ml-2 text-font-primary hover:text-primary-darker focus:text-primary-darker"
-            @click.prevent="removeFrame(frame.id)"
+            @click.prevent="removeFrame(frame)"
           >
             <SvgDelete class="w-6 fill-current" />
           </a>
         </header>
 
-        <TodoList :frame-id="frame.id" :todos="frame.todos" />
+        <TodoList :frame-id="frame.id" />
       </div>
     </section>
 
@@ -49,24 +49,41 @@ export default {
     },
   },
   methods: {
-    addFrame(title) {
-      const payload = { title, order: this.frames.length + 1 }
-      this.$store.dispatch('addFrame', payload)
+    async addFrame(title) {
+      this.$root.$loading.start()
+
+      let i = 1
+      for (const frame of this.frames) {
+        if (frame.order <= i) {
+          i++
+        }
+      }
+
+      await this.$store.dispatch('addFrame', {
+        title,
+        order: i,
+      })
+
+      this.$root.$loading.finish()
     },
 
-    updateFrameTitle(id, title) {
+    async updateFrameTitle(id, title) {
+      this.$root.$loading.start()
       const index = this.frames.findIndex((f) => f.id === id)
       const payload = { id, title, order: this.frames[index].order }
-      this.$store.dispatch('updateFrame', payload)
+      await this.$store.dispatch('updateFrame', payload)
+      this.$root.$loading.finish()
     },
 
-    removeFrame(id) {
+    async removeFrame(frame) {
       if (
         confirm(
           'Deseja excluir permanentemente este quadro e todas as suas tarefas?'
         )
       ) {
-        this.$store.dispatch('removeFrame', id)
+        this.$root.$loading.start()
+        await this.$store.dispatch('removeFrame', frame)
+        this.$root.$loading.finish()
       }
     },
   },

@@ -7,7 +7,8 @@
     >
       <div
         class="absolute w-full h-full bg-black opacity-75 modal-overlay"
-      ></div>
+        @click="close"
+      />
 
       <div
         class="z-50 w-11/12 mx-auto overflow-y-auto rounded shadow-xl bg-body modal-container md:max-w-md"
@@ -21,12 +22,20 @@
         </nuxt-link>
 
         <div class="px-6 py-4 text-left modal-content">
-          <div v-if="todo">
+          <div
+            v-if="$fetchState.pending || loading"
+            class="flex items-center justify-center p-4"
+          >
+            <SvgLoading class="text-primary-dark" />
+          </div>
+
+          <div v-else-if="todo && !$fetchState.error">
             <div class="flex items-start justify-between pb-3">
               <div class="w-full my-2 mr-2 text-2xl font-bold">
                 <EditableLabel
                   :value="todo.title"
-                  @confirmed="updateTodoTitle(todo.id, ...arguments)"
+                  @keydown.enter="console.log('enter')"
+                  @confirmed="updateTodoTitle"
                 />
               </div>
               <nuxt-link
@@ -53,6 +62,8 @@
               <textarea
                 v-model="todo.description"
                 placeholder="Adicione uma descrição mais detalhada..."
+                @keydown.enter="updated = true"
+                @change="updated = true"
               />
             </div>
 
@@ -69,7 +80,7 @@
               </label>
             </div>
 
-            <div class="flex justify-end gap-2 pt-4">
+            <div class="flex justify-end gap-2 pt-6">
               <button class="primary" @click="updateTodo">
                 <SvgSave class="fill-current" />
                 <span>Salvar</span>
@@ -79,17 +90,15 @@
                 <SvgDelete class="fill-current" />
                 <span>Excluir</span>
               </button>
+
+              <button @click="close">
+                <SvgClose class="fill-current" />
+                <span>Cancelar</span>
+              </button>
             </div>
           </div>
 
-          <div
-            v-else-if="$fetchState.pending || loading"
-            class="flex items-center justify-center p-4"
-          >
-            <SvgLoading class="text-primary-dark" />
-          </div>
-
-          <div v-else-if="$fetchState.error">
+          <div v-else>
             <div class="flex items-start justify-between pb-3">
               <p class="w-full my-2 mr-2 text-2xl font-bold">
                 Tarefa não localizada!
@@ -141,6 +150,7 @@ export default {
   },
   data: () => ({
     todo: null,
+    updated: false,
     loading: false,
   }),
   computed: {
@@ -151,31 +161,59 @@ export default {
 
       set(value) {
         this.todo.open = !value
+        this.updated = true
       },
     },
   },
   mounted() {
     if (document) {
-      document.addEventListener('keyup', (event) => {
-        if (event.keyCode === 27) {
-          this.$router.push('/')
-        }
-      })
+      document.addEventListener('keydown', this.keyHandler)
+    }
+  },
+  unmounted() {
+    if (document) {
+      document.removeEventListener('keydown', this.keyHandler)
     }
   },
   methods: {
-    async updateTodo() {
-      this.loading = true
-      const payload = { frameId: this.todo.frame_id, todo: this.todo }
-      await this.$store.dispatch('updateTodo', payload)
+    keyHandler(event) {
+      if (event.keyCode === 13 && !event.shiftKey) {
+        event.preventDefault()
+        event.stopPropagation()
+        this.updateTodo()
+      } else if (event.keyCode === 27) {
+        this.close()
+      }
+    },
+
+    close() {
       this.$router.push('/')
+    },
+
+    updateTodoTitle(title) {
+      this.todo.title = title
+      this.updated = true
+    },
+
+    async updateTodo() {
+      if (this.updated) {
+        this.loading = true
+        this.$root.$loading.start()
+        const payload = { frameId: this.todo.frame_id, todo: this.todo }
+        await this.$store.dispatch('updateTodo', payload)
+        this.$root.$loading.finish()
+      }
+
+      this.close()
     },
 
     async removeTodo() {
       if (confirm('Deseja excluir permanentemente esta tarefa?')) {
         this.loading = true
+        this.$root.$loading.start()
         await this.$store.dispatch('removeTodo', this.todo)
-        this.$router.push('/')
+        this.$root.$loading.finish()
+        this.close()
       }
     },
   },

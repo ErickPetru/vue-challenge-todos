@@ -7,7 +7,7 @@
       v-click-outside="cancelEditing"
       class="h-8"
       @keyup.esc="cancelEditing"
-      @keypress.enter="editing = false"
+      @keydown.enter="enterPressed"
       @blur="finishEditing"
     />
 
@@ -69,6 +69,11 @@ export default {
       } else {
         this.$emit('confirmed', this.internalValue)
       }
+    },
+
+    enterPressed() {
+      this.editing = false
+      this.$emit('keydown.enter')
     },
   },
 }

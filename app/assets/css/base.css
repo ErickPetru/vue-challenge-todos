@@ -113,9 +113,28 @@ button:focus {
   @apply shadow;
 }
 
+button:focus {
+  @apply outline-none;
+  @apply shadow-outline;
+}
+
 button svg {
   @apply fill-current;
   @apply flex-grow-0;
   @apply w-6;
   @apply mr-1;
+}
+
+.list-group > span:empty {
+  @apply block;
+  @apply w-full;
+  height: 1px;
+}
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
+.no-move {
+  transition: transform 0s;
 }
