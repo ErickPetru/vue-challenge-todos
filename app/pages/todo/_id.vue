@@ -166,7 +166,7 @@ export default {
       document.addEventListener('keydown', this.keyHandler)
     }
   },
-  unmounted() {
+  destroyed() {
     if (document) {
       document.removeEventListener('keydown', this.keyHandler)
     }
