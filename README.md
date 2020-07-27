@@ -1,14 +1,14 @@
-<img src="./assets/img/logo.svg" alt="To-Do List" width="96">
+<img src="./app/assets/img/logo.svg" alt="To-Do List" width="96">
 
 # Vue Challenge To-Do List
 
-> Desafio Vue.js referente à aplicação *To-Do List*, utilizada como tema pela [Ootz](http://ootz.com.br/) em processos de seleção.
+> Desafio Vue.js referente à aplicação **To-Do List**, utilizada como tema pela [Ootz](http://ootz.com.br/) para validação de conhecimentos nesta _stack_ tecnológica.
 
-A estrutura deste projeto foi gerada com o [Nuxt Create App](https://nuxtjs.org/guide/installation/). Para uma explicação mais aprofundada de como as coisas funcionam, recomenda-se estudar a [documentação do Nuxt.js](https://nuxtjs.org).
+A estrutura deste projeto foi gerada com o [Nuxt Create App](https://nuxtjs.org/guide/installation/) e utiliza em sua construção componentes Vue estilizados com TailwindCSS. Para uma explicação mais aprofundada de como as coisas funcionam, recomenda-se se respaldar na [documentação do Vue.js](https://br.vuejs.org), na [documentação do Nuxt.js](https://nuxtjs.org) e na [documentação do TailwindCSS](https://tailwindcss.com/docs).
 
 ## Desenvolvendo
 
-É provável que você já saiba, mas sempre vale lembrar: tenha certeza que o [Node](https://nodejs.org/) está pronto para execução em seu ambiente de desenvolvimento antes de começar. Então, após clonar este repositório, execute em um terminal no diretório raiz do projeto:
+Embora um requisito comum, sempre vale lembrar: tenha certeza de que o [Node](https://nodejs.org/) está pronto para execução em seu ambiente de desenvolvimento antes de começar. Então, após clonar este repositório, execute em um terminal no diretório raiz do projeto:
 
 ``` bash
 npm install
@@ -32,7 +32,7 @@ Então, em um terminal no diretório raiz do projeto, execute:
 $ npm start
 ```
 
-Isto irá subir a [imagem Node](https://hub.docker.com/_/node/) mais recente, empacotar a solução para distribuição e iniciar um _proxy_ reverso com a [imagem Nginx](https://hub.docker.com/_/nginx) mais recente, servindo a aplicação diretamente em [http://localhost/](http://localhost/). Ou seja, basicamente este simples comando pode ser utilizado em sua hospedagem de preferência com suporte a Docker.
+Isto irá subir a [imagem Node](https://hub.docker.com/_/node/) mais recente, empacotar a solução para distribuição e iniciar um _proxy_ reverso com a [imagem Nginx](https://hub.docker.com/_/nginx) mais recente, servindo a aplicação diretamente em [http://localhost/](http://localhost/). Ou seja, este mesmo comando pode ser utilizado em sua hospedagem de preferência com suporte a Docker para colocar o ambiente para executar.
 
 ## Licença
 
