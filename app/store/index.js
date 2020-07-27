@@ -16,13 +16,19 @@ export const mutations = {
 
   updateFrame(state, frame) {
     const index = state.frames.findIndex((f) => f.id === frame.id)
+    const oldFrame = state.frames[index]
+    if (!oldFrame) return
 
     if (frame.title !== undefined) {
-      state.frames[index].title = frame.title
+      oldFrame.title = frame.title
     }
 
     if (frame.order !== undefined) {
-      state.frames[index].order = frame.order
+      oldFrame.order = frame.order
+    }
+
+    if (frame.todos !== undefined) {
+      oldFrame.todos = frame.todos
     }
   },
 
@@ -38,45 +44,56 @@ export const mutations = {
 
   updateTodo(state, { frameId, todo }) {
     const frameIndex = state.frames.findIndex((f) => f.id === frameId)
-    const todoIndex = state.frames[frameIndex].todos.findIndex(
-      (t) => t.id === todo.id
-    )
+    const frame = state.frames[frameIndex]
+    if (!frame) return
+
+    const todoIndex = frame.todos.findIndex((t) => t.id === todo.id)
+    const oldTodo = frame.todos[todoIndex]
+    if (!oldTodo) return
 
     if (todo.frame_id !== undefined) {
-      state.frames[frameIndex].todos[todoIndex].frame_id = todo.frame_id
+      oldTodo.frame_id = todo.frame_id
     }
 
     if (todo.title !== undefined) {
-      state.frames[frameIndex].todos[todoIndex].title = todo.title
+      oldTodo.title = todo.title
     }
 
     if (todo.description !== undefined) {
-      state.frames[frameIndex].todos[todoIndex].description = todo.description
+      oldTodo.description = todo.description
     }
 
     if (todo.open !== undefined) {
-      state.frames[frameIndex].todos[todoIndex].open = todo.open
+      oldTodo.open = todo.open
     }
 
     if (todo.order !== undefined) {
-      state.frames[frameIndex].todos[todoIndex].order = todo.order
+      oldTodo.order = todo.order
+    }
+
+    if (todo.created_at !== undefined) {
+      oldTodo.created_at = todo.created_at
     }
 
     if (frameId !== todo.frame_id) {
       const newFrameIndex = state.frames.findIndex(
         (f) => f.id === todo.frame_id
       )
-      state.frames[newFrameIndex].todos.push(todo)
-      state.frames[frameIndex].todos.splice(todoIndex, 1)
+      const newFrame = state.frames[newFrameIndex]
+      if (!newFrame) return
+
+      newFrame.todos.push(todo)
+      frame.todos.splice(todoIndex, 1)
     }
   },
 
   removeTodo(state, todo) {
     const frameIndex = state.frames.findIndex((f) => f.id === todo.frame_id)
-    const todoIndex = state.frames[frameIndex].todos.findIndex(
-      (t) => t.id === todo.id
-    )
-    state.frames[frameIndex].todos.splice(todoIndex, 1)
+    const frame = state.frames[frameIndex]
+    if (!frame) return
+
+    const todoIndex = frame.todos.findIndex((t) => t.id === todo.id)
+    frame.todos.splice(todoIndex, 1)
   },
 }
 
@@ -92,9 +109,18 @@ export const actions = {
     return data
   },
 
-  async updateFrame({ commit }, frame) {
-    const { data } = await this.$http.$put('frame', frame)
-    await commit('updateFrame', data)
+  async updateFrame({ commit }, { mustCommit, frame }) {
+    const { data } = await this.$http.$put('frame', {
+      id: frame.id,
+      title: frame.title,
+      order: frame.order,
+      todos: frame.todos,
+    })
+
+    if (mustCommit !== false) {
+      await commit('updateFrame', data)
+    }
+
     return data
   },
 
@@ -105,9 +131,12 @@ export const actions = {
 
     for (const sibling of nextSiblings) {
       await dispatch('updateFrame', {
-        id: sibling.id,
-        title: sibling.title,
-        order: sibling.order - 1,
+        frame: {
+          id: sibling.id,
+          title: sibling.title,
+          order: sibling.order - 1,
+          todos: sibling.todos,
+        },
       })
     }
 
@@ -120,9 +149,13 @@ export const actions = {
     return data
   },
 
-  async updateTodo({ commit }, { frameId, todo }) {
+  async updateTodo({ commit }, { frameId, mustCommit, todo }) {
     const { data } = await this.$http.$put('todo', todo)
-    await commit('updateTodo', { frameId, todo: data })
+
+    if (mustCommit !== false) {
+      await commit('updateTodo', { frameId, todo: data })
+    }
+
     return data
   },
 
@@ -138,7 +171,12 @@ export const actions = {
       await dispatch('updateTodo', {
         frameId: todo.frame_id,
         todo: {
+          frame_id: todo.frame_id,
           id: sibling.id,
+          title: sibling.title,
+          description: sibling.description,
+          open: sibling.open,
+          created_at: sibling.created_at,
           order: sibling.order - 1,
         },
       })

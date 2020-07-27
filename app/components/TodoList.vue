@@ -86,15 +86,14 @@ export default {
         const frame = frames[frameIndex]
 
         if (!frame || !frame.todos || !frame.todos.length) return []
+        const todos = JSON.parse(JSON.stringify(frame.todos))
 
-        return frame.todos
-          .slice()
-          .sort(
-            (a, b) =>
-              a.order - b.order ||
-              dateParse(a.created_at, 'YYYY-MM-DD HH:mm:ss') -
-                dateParse(b.created_at, 'YYYY-MM-DD HH:mm:ss')
-          )
+        return todos.sort(
+          (a, b) =>
+            a.order - b.order ||
+            dateParse(a.created_at, 'YYYY-MM-DD HH:mm:ss') -
+              dateParse(b.created_at, 'YYYY-MM-DD HH:mm:ss')
+        )
       },
 
       async set(value) {
@@ -108,7 +107,6 @@ export default {
         for (const todo of changed) {
           const original = {
             frame_id: todo.frame_id,
-            title: todo.title,
             order: todo.order,
           }
 
@@ -120,10 +118,15 @@ export default {
               todo: {
                 id: todo.id,
                 frame_id: this.frameId,
+                created_at: todo.created_at,
                 title: todo.title,
                 open: todo.open,
                 order,
               },
+            }
+
+            if (todo.description) {
+              payload.todo.description = todo.description
             }
 
             this.$store.commit('updateTodo', payload)
@@ -132,6 +135,7 @@ export default {
         }
 
         for (const payload of updatable) {
+          payload.mustCommit = false
           await this.$store.dispatch('updateTodo', payload)
         }
 

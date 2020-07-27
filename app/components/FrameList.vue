@@ -84,18 +84,17 @@ export default {
     frames: {
       get() {
         const dateParse = this.$options.filters.dateParse
-        const frames = this.$store.state.frames
+        let frames = this.$store.state.frames
 
         if (!frames || !frames.length) return []
+        frames = JSON.parse(JSON.stringify(frames))
 
-        return frames
-          .slice()
-          .sort(
-            (a, b) =>
-              a.order - b.order ||
-              dateParse(a.created_at, 'YYYY-MM-DD HH:mm:ss') -
-                dateParse(b.created_at, 'YYYY-MM-DD HH:mm:ss')
-          )
+        return frames.sort(
+          (a, b) =>
+            a.order - b.order ||
+            dateParse(a.created_at, 'YYYY-MM-DD HH:mm:ss') -
+              dateParse(b.created_at, 'YYYY-MM-DD HH:mm:ss')
+        )
       },
 
       async set(value) {
@@ -113,6 +112,7 @@ export default {
             const payload = {
               id: frame.id,
               title: frame.title,
+              todos: frame.todos,
               order,
             }
 
@@ -122,7 +122,10 @@ export default {
         }
 
         for (const payload of updatable) {
-          await this.$store.dispatch('updateFrame', payload)
+          await this.$store.dispatch('updateFrame', {
+            mustCommit: false,
+            frame: payload,
+          })
         }
 
         this.$root.$loading.finish()
@@ -156,9 +159,17 @@ export default {
     async updateFrameTitle(id, title) {
       this.loading = true
       this.$root.$loading.start()
+
       const index = this.frames.findIndex((f) => f.id === id)
-      const payload = { id, title, order: this.frames[index].order }
-      await this.$store.dispatch('updateFrame', payload)
+      const frame = this.frames[index]
+
+      if (frame) {
+        const payload = { id, title, order: frame.order, todos: frame.todos }
+        await this.$store.dispatch('updateFrame', {
+          frame: payload,
+        })
+      }
+
       this.$root.$loading.finish()
       this.loading = false
     },

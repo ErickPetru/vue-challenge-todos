@@ -193,9 +193,26 @@ export default {
 
     async updateTodo() {
       if (this.updated) {
+        this.updated = false
+
         this.loading = true
         this.$root.$loading.start()
-        const payload = { frameId: this.todo.frame_id, todo: this.todo }
+        const payload = {
+          frameId: this.todo.frame_id,
+          todo: {
+            id: this.todo.id,
+            frame_id: this.todo.frame_id,
+            created_at: this.todo.created_at,
+            title: this.todo.title,
+            open: this.todo.open,
+            order: this.todo.order,
+          },
+        }
+
+        if (this.todo.description) {
+          payload.todo.description = this.todo.description
+        }
+
         await this.$store.dispatch('updateTodo', payload)
         this.$root.$loading.finish()
       }
