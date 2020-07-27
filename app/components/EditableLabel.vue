@@ -5,7 +5,8 @@
       ref="titleInput"
       v-model="internalValue"
       v-click-outside="cancelEditing"
-      class="h-8"
+      class="h-8 mx-2 my-2"
+      :disabled="disabled"
       @keyup.esc="cancelEditing"
       @keydown.enter="enterPressed"
       @blur="finishEditing"
@@ -14,7 +15,8 @@
     <a
       v-else
       :href="value ? '#editar' : '#adicionar'"
-      class="flex items-center w-full h-8 text-font-primary hover:text-primary-darker"
+      class="flex items-center w-full px-4 py-3 text-font-primary hover:text-primary-darker"
+      :disabled="disabled"
       @click.stop.prevent="startEditing"
       @focus="startEditing"
     >
@@ -36,6 +38,11 @@ export default {
     value: {
       type: String,
       default: null,
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data: () => ({
@@ -64,10 +71,11 @@ export default {
     finishEditing() {
       this.editing = false
 
-      if (this.internalValue === this.value) {
+      if (this.internalValue === this.value || !this.internalValue) {
         this.$emit('canceled')
       } else {
         this.$emit('confirmed', this.internalValue)
+        this.internalValue = ''
       }
     },
 

@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading" class="flex items-center justify-center p-4">
-    <SvgLoading class="text-primary-dark" />
+    <SvgLoading class="text-secondary-dark" />
   </div>
 
   <draggable
@@ -22,6 +22,7 @@
       >
         <nuxt-link
           :to="`/todo/${todo.id}`"
+          :disabled="loading || disabled"
           class="flex items-center justify-between w-full h-8 py-5 pl-3 pr-1 cursor-move text-font-primary hover:text-primary-darker"
         >
           <span>{{ todo.title }}</span>
@@ -31,8 +32,11 @@
     </transition-group>
 
     <template v-slot:footer>
-      <div class="p-3 mt-1 rounded bg-secondary-light">
-        <EditableLabel @confirmed="addTodo(...arguments)">
+      <div class="mt-1 whitespace-no-wrap rounded bg-secondary-light">
+        <EditableLabel
+          :disabled="loading || disabled"
+          @confirmed="addTodo(...arguments)"
+        >
           <span v-if="todos.length">+ Adicionar outra tarefa</span>
           <span v-else>+ Adicionar uma tarefa</span>
         </EditableLabel>
@@ -58,25 +62,32 @@ export default {
       type: String,
       default: null,
     },
+
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     loading: true,
     dragging: false,
-    dragOptions: {
-      animation: 200,
-      ghostClass: 'ghost',
-    },
   }),
   computed: {
+    dragOptions() {
+      return { disabled: this.loading || this.disabled, ghostClass: 'ghost' }
+    },
+
     todos: {
       get() {
         const dateParse = this.$options.filters.dateParse
 
         const frames = this.$store.state.frames
         const frameIndex = frames.findIndex((f) => f.id === this.frameId)
-        const todos = frames[frameIndex].todos || []
+        const frame = frames[frameIndex]
 
-        return todos
+        if (!frame || !frame.todos || !frame.todos.length) return []
+
+        return frame.todos
           .slice()
           .sort(
             (a, b) =>
@@ -97,6 +108,7 @@ export default {
         for (const todo of changed) {
           const original = {
             frame_id: todo.frame_id,
+            title: todo.title,
             order: todo.order,
           }
 
@@ -162,7 +174,7 @@ export default {
   @apply text-font-tertiary;
 }
 
-.ghost {
+.list-group .ghost {
   @apply opacity-50;
   @apply bg-primary;
 }

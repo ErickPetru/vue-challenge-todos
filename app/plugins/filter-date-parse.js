@@ -10,6 +10,8 @@ Vue.filter('dateParse', function (
   format = 'YYYY-MM-DD HH.mm.ss',
   { epoch = 2000 } = {}
 ) {
+  if (!input) return null
+
   let year = 2000
   if (format.includes('YYYY')) {
     year = parseInt(parse(input, format, 'YYYY'), 10)

@@ -74,5 +74,11 @@ module.exports = {
         darker: 'var(--color-secondary-darker)',
       },
     },
+
+    extend: {
+      transitionProperty: {
+        filter: 'filter',
+      },
+    },
   },
 }

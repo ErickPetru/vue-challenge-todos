@@ -40,6 +40,7 @@ export default {
   },
   components: true,
   loading: { color: '#54c147' },
+  pageTransition: 'fade',
   router: {
     linkExactActiveClass: 'link-exact-active',
     linkActiveClass: 'link-active',

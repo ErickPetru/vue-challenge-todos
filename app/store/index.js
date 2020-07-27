@@ -106,6 +106,7 @@ export const actions = {
     for (const sibling of nextSiblings) {
       await dispatch('updateFrame', {
         id: sibling.id,
+        title: sibling.title,
         order: sibling.order - 1,
       })
     }

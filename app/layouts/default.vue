@@ -4,13 +4,27 @@
     class="flex flex-col justify-between antialiased font-base bg-body text-font-primary"
     :class="theme"
   >
-    <Header />
+    <Header
+      class="duration-150 ease-in-out transition-filter"
+      :class="{ blur: !isHome }"
+    />
 
-    <div class="flex flex-col justify-center flex-grow">
-      <Nuxt />
+    <div
+      class="z-10 flex flex-col justify-start flex-grow overflow-x-auto duration-150 ease-in-out transition-filter"
+      :class="{ blur: !isHome }"
+    >
+      <div class="px-6 mx-auto">
+        <FrameList />
+      </div>
     </div>
 
-    <Footer @theme-changed="themeChanged" />
+    <Nuxt class="z-20" />
+
+    <Footer
+      class="duration-150 ease-in-out transition-filter"
+      :class="{ blur: !isHome }"
+      @theme-changed="themeChanged"
+    />
   </div>
 </template>
 
@@ -20,6 +34,11 @@ export default {
   data: () => ({
     theme: '',
   }),
+  computed: {
+    isHome() {
+      return !this.$route.params || !Object.keys(this.$route.params).length
+    },
+  },
   methods: {
     themeChanged(name = '') {
       this.theme = name ? `theme-${name}` : ''
